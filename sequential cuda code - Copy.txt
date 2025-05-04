@@ -1,0 +1,62 @@
+//sequential code:
+
+#include <iostream>
+#include <cstdlib>
+#include <chrono>
+using namespace std;
+using namespace chrono;
+
+void initialize(int* v, int n) {
+    for (int i = 0; i < n; i++) v[i] = rand() % 10;
+}
+
+void add(int* A, int* B, int* C, int n) {
+    for (int i = 0; i < n; i++) C[i] = A[i] + B[i];
+}
+
+void mul(int* A, int* B, int* C, int n) {
+    for (int i = 0; i < n; i++) C[i] = A[i] * B[i];
+}
+
+void print(int* v, int n) {
+    for (int i = 0; i < n; i++) cout << v[i] << " ";
+    cout << endl;
+}
+
+int main() {
+    int N = 100000000; 
+    int* A = new int[N];
+    int* B = new int[N];
+    int* C_add = new int[N];
+    int* C_mul = new int[N];
+
+    initialize(A, N);
+    initialize(B, N);
+
+    auto startAdd = high_resolution_clock::now();
+    add(A, B, C_add, N);
+    auto endAdd = high_resolution_clock::now();
+    double timeAdd = duration<double, milli>(endAdd - startAdd).count();
+
+    auto startMul = high_resolution_clock::now();
+    mul(A, B, C_mul, N);
+    auto endMul = high_resolution_clock::now();
+    double timeMul = duration<double, milli>(endMul - startMul).count();
+
+    cout << "Vector A: "; print(A, 10);
+    cout << "Vector B: "; print(B, 10);
+    cout << "Addition : "; print(C_add, 10);
+    cout << "Multiply : "; print(C_mul, 10);
+
+    
+    cout << "Time taken for addition: " << timeAdd << " ms" << endl;
+    cout << "Time taken for multiplication: " << timeMul << " ms" << endl;
+
+    delete[] A;
+    delete[] B;
+    delete[] C_add;
+    delete[] C_mul;
+
+    return 0;
+}
+
